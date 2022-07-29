@@ -1924,6 +1924,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fp-ts@npm:^2.12.2":
+  version: 2.12.2
+  resolution: "fp-ts@npm:2.12.2"
+  checksum: 18c1975b5a5597d54d1905d322d2bdcf7c5aae3f1b48c2e13f5352cd10a7882a49bfe9681ed1f4392874f9b26dd29a997df6fa341a3731226e5737b0f9a49b38
+  languageName: node
+  linkType: hard
+
 "fraction.js@npm:^4.2.0":
   version: 4.2.0
   resolution: "fraction.js@npm:4.2.0"
@@ -3114,6 +3121,7 @@ __metadata:
     eslint-config-next: 12.1.4
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.0.0
+    fp-ts: ^2.12.2
     framer-motion: ^6.2.10
     i18next: ^21.8.9
     i18next-browser-languagedetector: ^6.1.4
