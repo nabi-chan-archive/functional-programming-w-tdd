@@ -1,6 +1,17 @@
 {
   "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
+  "plugins": ["testing-library"],
   "rules": {
     "prettier/prettier": "warn"
-  }
+  },
+  "overrides": [
+    // Only uses Testing Library lint rules in test files
+    {
+      "files": [
+        "**/__tests__/**/*.[jt]s?(x)",
+        "**/?(*.)+(spec|test).[jt]s?(x)"
+      ],
+      "extends": ["plugin:testing-library/react"]
+    }
+  ]
 }
