@@ -6,7 +6,7 @@ export type TokenMeta = {
 };
 
 export async function getTokensMeta() {
-  await new Promise((r) => setTimeout(r, 3000));
+  // await new Promise((r) => setTimeout(r, 3000));
   return tokensMeta;
 }
 
@@ -51,7 +51,7 @@ export type TokenVisible = {
 };
 
 export async function getTokensVisible() {
-  await new Promise((r) => setTimeout(r, 2000));
+  // await new Promise((r) => setTimeout(r, 2000));
   return tokensVisible;
 }
 
