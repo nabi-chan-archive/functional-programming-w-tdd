@@ -21,12 +21,14 @@
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-http-backend": "^1.4.1",
     "next": "12.1.4",
+    "ramda": "^0.28.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-i18next": "^11.17.2"
   },
   "devDependencies": {
     "@types/node": "17.0.23",
+    "@types/ramda": "^0.28.15",
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
     "autoprefixer": "^10.4.4",
