@@ -5,6 +5,11 @@ export type TokenMeta = {
   createdAt: `${ReturnType<Date["toISOString"]>}`;
 };
 
+export async function getTokensMeta() {
+  await new Promise((r) => setTimeout(r, 3000));
+  return tokensMeta;
+}
+
 export const tokensMeta: TokenMeta[] = [
   {
     id: "0",
@@ -44,6 +49,11 @@ export type TokenVisible = {
   isHidden: `${boolean}`;
   order: `${number}`;
 };
+
+export async function getTokensVisible() {
+  await new Promise((r) => setTimeout(r, 2000));
+  return tokensVisible;
+}
 
 export const tokensVisible: TokenVisible[] = [
   {
