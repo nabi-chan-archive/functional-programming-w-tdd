@@ -1,5 +1,5 @@
 import { TokenMeta, TokenVisible } from "/constants/database";
-import { groupByTokenId } from "/modules/readnft";
+import { groupByTokenId, mergeVisibleAndMeta } from "/modules/readnft";
 
 const __mocked_test_meta__: TokenMeta[] = [
   {
@@ -80,5 +80,34 @@ describe("groupByTokenId", () => {
 
   it("if array is empty, just return empty object", () => {
     expect(groupByTokenId([])).toStrictEqual({});
+  });
+});
+
+describe("mergeVisibleAndMeta", () => {
+  it("well merged", () => {
+    const expectArray = [
+      {
+        ...__mocked_test_meta__[0],
+        ...__mocked_test_visible__[0],
+      },
+      {
+        ...__mocked_test_meta__[1],
+        ...__mocked_test_visible__[1],
+      },
+      {
+        ...__mocked_test_meta__[2],
+        ...__mocked_test_visible__[1],
+      },
+      {
+        ...__mocked_test_meta__[3],
+        ...__mocked_test_visible__[2],
+      },
+      {
+        ...__mocked_test_meta__[4],
+        ...__mocked_test_visible__[3],
+      },
+    ];
+
+    expect(mergeVisibleAndMeta(__mocked_test_visible__)(__mocked_test_meta__)).toStrictEqual(expectArray);
   });
 });
