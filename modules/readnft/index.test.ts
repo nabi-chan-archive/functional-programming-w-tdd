@@ -59,6 +59,12 @@ const __mocked_test_visible__: TokenVisible[] = [
     isHidden: "true",
     order: "15",
   },
+  {
+    id: "0",
+    nftTokenId: "6",
+    isHidden: "true",
+    order: "15",
+  },
 ];
 
 describe("groupByTokenId", () => {
