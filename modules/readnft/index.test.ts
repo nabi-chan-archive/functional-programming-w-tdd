@@ -1,5 +1,6 @@
+import { pipe } from "fp-ts/lib/function";
 import { TokenMeta, TokenVisible } from "/constants/database";
-import { mergeVisibleAndMeta } from "/modules/readnft";
+import { all, filter, merge, sort, visibleArrToMap, TokenInfo } from "/modules/readnft";
 
 const __mocked_test_meta__: TokenMeta[] = [
   {
@@ -67,31 +68,58 @@ const __mocked_test_visible__: TokenVisible[] = [
   },
 ];
 
-describe("mergeVisibleAndMeta", () => {
-  it("well merged", () => {
-    const expectArray = [
-      {
-        ...__mocked_test_meta__[0],
-        ...__mocked_test_visible__[0],
-      },
-      {
-        ...__mocked_test_meta__[1],
-        ...__mocked_test_visible__[1],
-      },
-      {
-        ...__mocked_test_meta__[2],
-        ...__mocked_test_visible__[1],
-      },
-      {
-        ...__mocked_test_meta__[3],
-        ...__mocked_test_visible__[2],
-      },
-      {
-        ...__mocked_test_meta__[4],
-        ...__mocked_test_visible__[3],
-      },
-    ];
-
-    expect(mergeVisibleAndMeta(__mocked_test_visible__)(__mocked_test_meta__)).toStrictEqual(expectArray);
+describe("visibleArrToMap", () => {
+  it("works with normal case", () => {
+    expect(visibleArrToMap(__mocked_test_visible__)).toStrictEqual(
+      new Map([
+        [__mocked_test_visible__[0].nftTokenId, __mocked_test_visible__[0]],
+        [__mocked_test_visible__[1].nftTokenId, __mocked_test_visible__[1]],
+        [__mocked_test_visible__[2].nftTokenId, __mocked_test_visible__[2]],
+        [__mocked_test_visible__[3].nftTokenId, __mocked_test_visible__[3]],
+        [__mocked_test_visible__[4].nftTokenId, __mocked_test_visible__[4]],
+      ]),
+    );
   });
+});
+
+const __mocked_merge_info__: TokenInfo[] = __mocked_test_meta__.map((i) => ({
+  _id: i.id,
+  ...i,
+  ...__mocked_test_visible__.find((i) => i.nftTokenId === i.nftTokenId)!,
+}));
+
+describe("merge", () => {
+  it("should defined function", () => {
+    expect(typeof merge).toBe("function");
+  });
+
+  it("works with normal case", () => {
+    expect(pipe(__mocked_test_visible__, visibleArrToMap, merge(__mocked_test_meta__))).toStrictEqual(
+      __mocked_merge_info__,
+    );
+  });
+});
+
+describe("filter", () => {
+  it("should defined function", () => {
+    expect(typeof filter).toBe("function");
+  });
+
+  it("works with normal case", () => {});
+});
+
+describe("sort", () => {
+  it("should defined function", () => {
+    expect(typeof sort).toBe("function");
+  });
+
+  it("works with normal case", () => {});
+});
+
+describe("all", () => {
+  it("should defined function", () => {
+    expect(typeof all).toBe("function");
+  });
+
+  it("works with normal case", () => {});
 });
