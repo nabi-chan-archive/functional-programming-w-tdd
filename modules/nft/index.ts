@@ -1,7 +1,9 @@
 import { TokenMeta as Meta, TokenVisible as Visible } from "constants/database";
 import { Numeric } from "../types";
 import { pipe } from "fp-ts/lib/function";
-import { map } from "fp-ts/lib/Array";
+import { map, filter as _filter, sort as _sort } from "fp-ts/lib/Array";
+import { Ord } from "fp-ts/lib/string";
+import { contramap, reverse } from "fp-ts/lib/Ord";
 
 export type TokenInfo = Visible &
   Meta & {
@@ -37,8 +39,14 @@ export const merge =
   (v: MappedVisible): Info[] =>
     pipe(m, map(visibleObject(v)));
 
-export const filter = (items: Info[]) => items.filter((item) => item.isHidden === "false");
+const isHidden = (item: Info) => item.isHidden === "false";
+export const filter = (items: Info[]) => pipe(items, _filter(isHidden));
 
-export const sort = (items: Info[]) => items.sort((prev, next) => Number(next.order) - Number(prev.order));
+const sortByOrder = pipe(
+  Ord,
+  reverse,
+  contramap((item: Info) => item.order),
+);
+export const sort = (items: Info[]) => pipe(items, _sort(sortByOrder));
 
 export const all = (meta: Meta[]) => (visible: Visible[]) => pipe(visible, visibleArrToMap, merge(meta), filter, sort);
