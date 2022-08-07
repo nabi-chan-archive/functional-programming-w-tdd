@@ -15,24 +15,33 @@ export type NumericMap<T> = Map<Numeric, T>;
 export type MappedVisible = NumericMap<Visible>;
 export type MappedInfo = NumericMap<Info>;
 
+let makeToken =
+  (_id: Numeric) =>
+  (meta: Meta) =>
+  (visible: Visible): Info => ({
+    _id,
+    ...meta,
+    ...visible,
+  });
+
 export const visibleArrToMap = (visible: Visible[]) => new Map(visible.map((x) => [x.nftTokenId, x]));
 
-export const defaultVisible = (nftTokenId: Numeric): Visible => ({
+export const defaultVisible: (nftTokenId: Numeric) => () => Visible = (nftTokenId: Numeric) => (): Visible => ({
   id: "-1",
   nftTokenId,
   order: "0",
   isHidden: "false",
 });
 
-export const visibleFromMap = (v: MappedVisible) => (nftId: Numeric) => pipe(v.get(nftId) || defaultVisible(nftId));
+export const visibleFromMap: (v: MappedVisible) => (nftId: Numeric) => Option.Option<Visible> =
+  (v: MappedVisible) => (nftId: Numeric) =>
+    pipe(v.get(nftId), Option.fromNullable);
+
 
 export const visibleObject =
   (v: MappedVisible) =>
-  (m: Meta): Info => ({
-    _id: m.id,
-    ...m,
-    ...visibleFromMap(v)(m.nftTokenId),
-  });
+  (m: Meta): Info =>
+    pipe(visibleFromMap(v)(m.nftTokenId), Option.getOrElse(defaultVisible(m.nftTokenId)), makeToken(m.id)(m));
 
 export const mergeMetaWithVisibleMap =
   (m: Meta[]) =>
