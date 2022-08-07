@@ -1,6 +1,6 @@
 import { pipe } from "fp-ts/lib/function";
 import { TokenMeta, TokenVisible } from "/constants/database";
-import { all, merge, visibleArrToMap, TokenInfo, filter, sort } from ".";
+import { all, visibleArrToMap, TokenInfo, keepNonHidden, sortItemsByItsOrder, mergeMetaWithVisibleMap } from ".";
 
 const __mocked_token_meta__: TokenMeta[] = [
   {
@@ -148,39 +148,54 @@ const __mocked_token_final__: TokenInfo[] = [
 
 describe("merge", () => {
   it("works with normal case", () => {
-    expect(pipe(__mocked_token_visible__, visibleArrToMap, merge(__mocked_token_meta__))).toStrictEqual(
-      __mocked_token_info__,
-    );
+    expect(
+      pipe(__mocked_token_visible__, visibleArrToMap, mergeMetaWithVisibleMap(__mocked_token_meta__)),
+    ).toStrictEqual(__mocked_token_info__);
   });
 });
 
 describe("merge", () => {
   it("should be exclude unmatched visible", () => {
     expect(
-      merge(__mocked_token_meta__)(visibleArrToMap(__mocked_token_visible__)).some((i) => i.nftTokenId === "6"),
+      mergeMetaWithVisibleMap(__mocked_token_meta__)(visibleArrToMap(__mocked_token_visible__)).some(
+        (i) => i.nftTokenId === "6",
+      ),
     ).toBeFalsy();
   });
 });
 
 describe("filter", () => {
   it("should be include isHidden=false item", () => {
-    expect(filter(__mocked_token_info__).some((item) => item.isHidden === "true")).not.toBeTruthy();
-    expect(filter(__mocked_token_info__).some((item) => item.isHidden === "false")).toBeTruthy();
+    expect(keepNonHidden(__mocked_token_info__).some((item) => item.isHidden === "true")).not.toBeTruthy();
+    expect(keepNonHidden(__mocked_token_info__).some((item) => item.isHidden === "false")).toBeTruthy();
   });
 
   it("should be exclude isHidden=true item", () => {
-    expect(filter(__mocked_token_info__).some((item) => item.isHidden === "false")).toBeTruthy();
-    expect(filter(__mocked_token_info__).some((item) => item.isHidden === "true")).not.toBeTruthy();
+    expect(keepNonHidden(__mocked_token_info__).some((item) => item.isHidden === "false")).toBeTruthy();
+    expect(keepNonHidden(__mocked_token_info__).some((item) => item.isHidden === "true")).not.toBeTruthy();
+  });
+
+  it("should be exclude invalid isHidden value", () => {
+    expect(keepNonHidden(__mocked_token_info__).some((item) => item.isHidden !== "false")).toBeFalsy();
   });
 });
 
 describe("sort", () => {
   it("should be sorted first item order is 30", () => {
-    expect(sort(__mocked_token_info__)[0].order).toBe("30");
+    const highestOrder = __mocked_token_info__.reduce(
+      (prev, cur) => (Number(prev) < Number(cur.order) ? cur.order : prev),
+      "0",
+    );
+    expect(sortItemsByItsOrder(__mocked_token_info__)[0].order).toBe(highestOrder);
   });
 
   it("should be sorted last item order is 0", () => {
-    expect(sort(__mocked_token_info__)[4].order).toBe("0");
+    const lowestOrder = __mocked_token_info__.reduce(
+      (prev, cur) => (Number(prev) > Number(cur.order) ? cur.order : prev),
+      "0",
+    );
+    const sorted = sortItemsByItsOrder(__mocked_token_info__);
+    expect(sorted[sorted.length - 1].order).toBe(lowestOrder);
   });
 });
 
