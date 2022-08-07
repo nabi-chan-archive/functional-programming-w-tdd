@@ -24,8 +24,7 @@ export const defaultVisible = (nftTokenId: Numeric): Visible => ({
   isHidden: "false",
 });
 
-export const visibleFromMap = (v: MappedVisible) => (nftId: Numeric) =>
-  pipe(v.get(nftId), Option.of, Option.getOrElse(defaultVisible(nftId)));
+export const visibleFromMap = (v: MappedVisible) => (nftId: Numeric) => pipe(v.get(nftId) || defaultVisible(nftId));
 
 export const visibleObject =
   (v: MappedVisible) =>
