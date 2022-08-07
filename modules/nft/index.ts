@@ -26,16 +26,14 @@ let makeToken =
 
 export const visibleArrToMap = (visible: Visible[]) => new Map(visible.map((x) => [x.nftTokenId, x]));
 
-export const defaultVisible: (nftTokenId: Numeric) => () => Visible = (nftTokenId: Numeric) => (): Visible => ({
+export const defaultVisible = (nftTokenId: Numeric) => (): Visible => ({
   id: "-1",
   nftTokenId,
   order: "0",
   isHidden: "false",
 });
 
-export const visibleFromMap: (v: MappedVisible) => (nftId: Numeric) => Option.Option<Visible> =
-  (v: MappedVisible) => (nftId: Numeric) =>
-    pipe(v.get(nftId), Option.fromNullable);
+export const visibleFromMap = (v: MappedVisible) => (nftId: Numeric) => pipe(v.get(nftId), Option.fromNullable);
 
 export const visibleObject =
   (v: MappedVisible) =>
