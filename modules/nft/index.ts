@@ -45,8 +45,8 @@ export const keepNonHidden = (items: Info[]) => pipe(items, Array.filter(isHidde
 
 const sortByOrder = pipe(
   String.Ord,
-  Ord.reverse,
   Ord.contramap((item: Info) => item.order),
+  Ord.reverse,
 );
 export const sortItemsByItsOrder = (items: Info[]) => pipe(items, Array.sort(sortByOrder));
 
