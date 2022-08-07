@@ -37,7 +37,6 @@ export const visibleFromMap: (v: MappedVisible) => (nftId: Numeric) => Option.Op
   (v: MappedVisible) => (nftId: Numeric) =>
     pipe(v.get(nftId), Option.fromNullable);
 
-
 export const visibleObject =
   (v: MappedVisible) =>
   (m: Meta): Info =>
